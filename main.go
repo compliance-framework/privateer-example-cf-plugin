@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"time"
-    "os/exec"
-    "os"
-    "strings"
+	"os/exec"
+	"os"
+	"strings"
 
 	. "github.com/compliance-framework/assessment-runtime/provider"
 	"github.com/google/uuid"
