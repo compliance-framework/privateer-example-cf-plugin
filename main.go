@@ -13,51 +13,43 @@ import (
 )
 
 type PrivateerExampleProvider struct {
-    message string
+	message string
 }
 
 func (p *PrivateerExampleProvider) Evaluate(input *EvaluateInput) (*EvaluateResult, error) {
 	// Extract the passed-in YAML into code here.
-    yamlString, ok := input.Configuration["yaml"]
-    if !ok {
-        return nil, fmt.Errorf("yaml parameter is missing")
-    }
-    log.Printf("yamlString: %s", yamlString)
+	yamlString, ok := input.Configuration["yaml"]
+	if !ok {
+		return nil, fmt.Errorf("yaml parameter is missing")
+	}
+	log.Printf("yamlString: %s", yamlString)
 
 	// Take that YAML string and create a config file /raid-wireframe-config.yml, eg
-    // Define the path where the YAML file should be created
-    configFilePath := "/raid-wireframe-config.yml"
-    // EXAMPLE FILE:
-    //loglevel: Debug
-    //WriteDirectory: sample_test_output
-    //raids:
-    //  SVC:
-    //    tactics:
-    //      - CCC_OS_Taxonomy
-    //      - CCC_OS_Security
+	// Define the path where the YAML file should be created
+	configFilePath := "/raid-wireframe-config.yml"
 
-    // Create the config file
-    file, err := os.Create(configFilePath)
-    if err != nil {
-        return nil, fmt.Errorf("failed to create file: %v", err)
-    }
-    defer file.Close()
+	// Create the config file
+	file, err := os.Create(configFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create file: %v", err)
+	}
+	defer file.Close()
 
-    // Write the YAML string to the file
-    _, err = file.WriteString(yamlString)
-    if err != nil {
-        return nil, fmt.Errorf("failed to write to file: %v", err)
-    }
+	// Write the YAML string to the file
+	_, err = file.WriteString(yamlString)
+	if err != nil {
+		return nil, fmt.Errorf("failed to write to file: %v", err)
+	}
 
-    log.Printf("Successfully created config file at %s", configFilePath)
+	log.Printf("Successfully created config file at %s", configFilePath)
 
 	// There can be an array of subjects if needed, but here we have only one
 	subjects := make([]*Subject, 0)
-	subject_id := fmt.Sprintf("Subject identifier: %s", "OSCAL Subject ID placeholder")
+	subject_id := fmt.Sprintf("Subject identifier: %s", "Privateer example Subject ID placeholder")
 	subjects = append(subjects, &Subject{
 		Id:    subject_id,
 		Type:  SubjectType_INVENTORY_ITEM,
-		Title: "OSCAL Subject title placeholder",  // GITHUB TEMPLATE INSTRUCTIONS: Replace this with your subject title
+		Title: "Privateer Example Subject",
 		Props: map[string]string{
 			"id": subject_id,
 		},
@@ -142,8 +134,8 @@ func (p PrivateerExampleProvider) Execute(input *ExecuteInput) (*ExecuteResult, 
 
 	// Log that the check has successfully run
 	logEntry := &LogEntry{
-		Title:       "Log entry title",
-		Description: "Log entry description",
+		Title:       "Privateer example log entry title",
+		Description: "Privateer example log entry description",
 		Start:       start_time,
 		End:         time.Now().Format(time.RFC3339),
 	}
