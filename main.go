@@ -78,13 +78,22 @@ func (p PrivateerExampleProvider) Execute(input *ExecuteInput) (*ExecuteResult, 
 
 	obs_id := uuid.New().String()
 
-	// TODO
-	// put the code that determines whether we are in
-	// compliance or not here, replacing 'true' with the logic required
-	compliant := true
-// Then run
-// privateer -c /raid-wireframe-config.yml sally | grep -c ERROR
-// If output == 0, then compliant, else uncompliant
+	// Work out whether we're compliant. Assume false first.
+	compliant := false
+
+	// Run the command and capture the output
+	cmd := exec.Command("bash", "-c", "privateer -c /raid-wireframe-config.yml sally | grep -c ERROR")
+	outputBytes, err := cmd.Output()
+	if err != nil {
+		fmt.Printf("Error running command: %v\n", err)
+		return
+	}
+	// Convert the output to a string and trim whitespace
+	outputStr := strings.TrimSpace(string(outputBytes))
+	// Check the output value
+	if outputStr == "0" {
+		compliant = true
+	}
 
 	if (!compliant) {
 		// observation and finding
@@ -117,14 +126,14 @@ func (p PrivateerExampleProvider) Execute(input *ExecuteInput) (*ExecuteResult, 
 		obs = &Observation{
 			Id:          obs_id,
 			Title:       "Privateer Example Observation",
-			Description: "Description of the observation that did not succeed",
+			Description: "Description of the observation that succeeded",
 			Collected:   time.Now().Format(time.RFC3339),
 			Expires:     time.Now().AddDate(0, 1, 0).Format(time.RFC3339),
 			Links:       []*Link{},
 			Props: []*Property{},
 			RelevantEvidence: []*Evidence{
 				{
-					Description: "Raid ran and failed",
+					Description: "Raid ran and succeeded",
 				},
 			},
 			Remarks: "All OK.",
