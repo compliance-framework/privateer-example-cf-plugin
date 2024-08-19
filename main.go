@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"time"
+    "os/exec"
     "os"
+    "strings"
 
 	. "github.com/compliance-framework/assessment-runtime/provider"
 	"github.com/google/uuid"
@@ -83,11 +85,8 @@ func (p PrivateerExampleProvider) Execute(input *ExecuteInput) (*ExecuteResult, 
 
 	// Run the command and capture the output
 	cmd := exec.Command("bash", "-c", "privateer -c /raid-wireframe-config.yml sally | grep -c ERROR")
-	outputBytes, err := cmd.Output()
-	if err != nil {
-		fmt.Printf("Error running command: %v\n", err)
-		return
-	}
+	outputBytes, _ := cmd.Output()
+	// TODO: handle err
 	// Convert the output to a string and trim whitespace
 	outputStr := strings.TrimSpace(string(outputBytes))
 	// Check the output value
